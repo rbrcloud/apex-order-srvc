@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/apex_tracker?currentSchema=orders
+    username: postgres
+    password: P@ssw0rd1
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    # JPA specific properties (how spring interacts with database)
+    hibernate:
+      # ddl-auto: validate  # Validate that entities match the DB
+      ddl-auto: update  # Automatically create/update tables based on entities
+
+    # Hibernate specific implementation properties (direct to hibernate)
+    properties:
+      hibernate:
+        default_schema: portfolio
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # Use PostgreSQL dialect
+      format_sql: true
+
+    # Show SQL statements in the console. Set to false in production.
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.types.headers: false # To prevent sending class metadata
+server:
+  port: 8080
+
+market-data-srvc:
+  url: http://market-data-srvc:8080
