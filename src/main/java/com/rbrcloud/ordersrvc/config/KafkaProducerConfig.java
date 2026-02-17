@@ -23,6 +23,11 @@ public class KafkaProducerConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        // Required so consumer can deserialize: add __TypeId__ header and use alias in type mapping
+        config.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, true);
+        config.put(JsonSerializer.TYPE_MAPPINGS,
+                "orderPlacedEvent:com.rbrcloud.ordersrvc.dto.OrderPlacedEvent"
+        );
         return new DefaultKafkaProducerFactory<>(config);
     }
 

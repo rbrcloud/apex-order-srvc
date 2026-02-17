@@ -7,9 +7,11 @@ import com.rbrcloud.ordersrvc.repository.OrderRepository;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @Service
@@ -40,8 +42,10 @@ public class OrderService {
         event.setOrderId(savedOrder.getId());
         event.setPlacedAt(savedOrder.getCreatedAt());
 
-        // Publish to kafka
-        kafkaTemplate.send(ORDER_PLACED_TOPIC, event.getTicker(), event);
+        // Publish to kafka with __TypeId__ header so consumer can deserialize (ProducerRecord guarantees header is on the record)
+        ProducerRecord<String, Object> record = new ProducerRecord<>(ORDER_PLACED_TOPIC, event.getTicker(), event);
+        record.headers().add("__TypeId__", "orderPlacedEvent".getBytes(StandardCharsets.UTF_8));
+        kafkaTemplate.send(record);
         log.info("Published OrderPlacedEvent to kafka: {}", event.getOrderId());
     }
 }

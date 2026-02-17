@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.rbr.apex</groupId>
+    <groupId>com.rbrcloud.apex</groupId>
     <artifactId>apex-order-srvc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -57,15 +57,15 @@
             <optional>true</optional>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.rbr.apex</groupId>-->
+<!--            <artifactId>shared-lib</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.rbr.apex</groupId>
-            <artifactId>shared-lib</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -105,6 +105,21 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>lib</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
